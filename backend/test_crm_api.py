@@ -9,6 +9,8 @@ Verifies:
 6. Update ticket status (PUT /api/tickets/{id})
 7. Add note to ticket (PUT /api/tickets/{id})
 """
+import os
+import sys
 import urllib.request
 import urllib.parse
 import json
