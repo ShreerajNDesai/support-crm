@@ -3,8 +3,8 @@ Automated end-to-end integration test for the Support CRM API.
 Verifies:
 1. List tickets (GET /api/tickets)
 2. Filter by status (GET /api/tickets?status=Open)
-3. Search by text (GET /api/tickets?search=password)
-4. Create new ticket with auto-categorization (POST /api/tickets)
+3. Create new ticket with auto-categorization (POST /api/tickets)
+4. Search tickets by text (GET /api/tickets?search=...)
 5. Get single ticket with notes (GET /api/tickets/{id})
 6. Update ticket status (PUT /api/tickets/{id})
 7. Add note to ticket (PUT /api/tickets/{id})
@@ -39,12 +39,7 @@ def run_tests():
     assert all(t["status"] == "Open" for t in open_tickets), "Status filter failed"
     print(f"[PASS] 2. GET /api/tickets?status=Open: retrieved {len(open_tickets)} open tickets")
 
-    # 3. Search tickets
-    search_res = request("GET", "/api/tickets?search=password")
-    assert len(search_res) > 0, "Search failed"
-    print(f"[PASS] 3. GET /api/tickets?search=password: found {len(search_res)} matching tickets")
-
-    # 4. Create new ticket (auto-categorization test: "refund invoice" -> Billing)
+    # 3. Create new ticket (auto-categorization test: refund invoice -> Billing)
     new_ticket = request("POST", "/api/tickets", {
         "customer_name": "Test User",
         "customer_email": "test@example.com",
@@ -53,8 +48,13 @@ def run_tests():
     })
     ticket_id = new_ticket["ticket_id"]
     category = new_ticket.get("category")
-    print(f"[PASS] 4. POST /api/tickets: created {ticket_id}, auto-classified category: '{category}'")
+    print(f"[PASS] 3. POST /api/tickets: created {ticket_id}, auto-classified category: '{category}'")
     assert category == "Billing", f"Expected category 'Billing', got '{category}'"
+
+    # 4. Search tickets (self-contained: searches for the ticket created in step 3)
+    search_res = request("GET", "/api/tickets?search=duplicate+transaction")
+    assert any(t["ticket_id"] == ticket_id for t in search_res), "Search failed to find created ticket"
+    print(f"[PASS] 4. GET /api/tickets?search=duplicate+transaction: found {len(search_res)} matching tickets")
 
     # 5. Get ticket details
     detail = request("GET", f"/api/tickets/{ticket_id}")
