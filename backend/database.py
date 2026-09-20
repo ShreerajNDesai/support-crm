@@ -10,6 +10,18 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 # Default to a local crm.db file; override via env var for deployment
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./crm.db")
 
+# Ensure parent directory exists for SQLite database file if a directory is specified
+if DATABASE_URL.startswith("sqlite:////"):
+    _db_file = DATABASE_URL.replace("sqlite:////", "/")
+    _db_dir = os.path.dirname(_db_file)
+    if _db_dir:
+        os.makedirs(_db_dir, exist_ok=True)
+elif DATABASE_URL.startswith("sqlite:///"):
+    _db_file = DATABASE_URL.replace("sqlite:///", "")
+    _db_dir = os.path.dirname(_db_file)
+    if _db_dir:
+        os.makedirs(_db_dir, exist_ok=True)
+
 # connect_args needed for SQLite to allow multi-threaded access in FastAPI
 engine = create_engine(
     DATABASE_URL,

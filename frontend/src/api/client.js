@@ -3,7 +3,9 @@
  * All API calls go through this module so the backend URL is never hardcoded.
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const rawUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// Strip trailing slash if present to avoid double slashes like https://api.com//api/tickets
+const BASE_URL = rawUrl.replace(/\/+$/, "");
 
 async function request(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
@@ -16,11 +18,22 @@ async function request(endpoint, options = {}) {
   };
 
   const response = await fetch(url, config);
+  const contentType = response.headers.get("content-type") || "";
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const message = errorData.detail || `Request failed with status ${response.status}`;
+    let message = `Request failed with status ${response.status}`;
+    if (contentType.includes("application/json")) {
+      const errorData = await response.json().catch(() => ({}));
+      message = errorData.detail || message;
+    }
     throw new Error(Array.isArray(message) ? message.map(e => e.msg).join(", ") : message);
+  }
+
+  // Guard against HTML responses (e.g. Vercel SPA rewrite when URL points to frontend instead of backend)
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `Received HTML instead of JSON from "${url}". Please verify VITE_API_URL in Vercel points to your Railway backend URL, not the Vercel frontend URL.`
+    );
   }
 
   return response.json();
