@@ -13,7 +13,9 @@ import urllib.request
 import urllib.parse
 import json
 
-BASE_URL = "http://127.0.0.1:8000"
+# Use PORT env var (Railway sets this dynamically) or fall back to 8000 for local dev
+_port = os.environ.get("PORT", "8000")
+BASE_URL = os.environ.get("TEST_BASE_URL", f"http://127.0.0.1:{_port}")
 
 def request(method, path, body=None):
     url = f"{BASE_URL}{path}"

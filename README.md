@@ -3,7 +3,7 @@
 A full-stack Customer Support CRM built for the **Datastraw Technologies** hiring assessment. The application lets support teams create, search, filter, and manage customer support tickets with an internal notes timeline and AI-powered auto-categorization.
 
 **Live Demo:**
-- Frontend: [https://support-crm-frontend.vercel.app](https://support-crm-frontend.vercel.app) *(update with your Vercel URL)*
+- Frontend: [https://support-crm-two-neon.vercel.app/](https://support-crm-two-neon.vercel.app/)
 - Backend API: [https://support-crm-production-78cc.up.railway.app](https://support-crm-production-78cc.up.railway.app)
 - API Docs (Swagger): [https://support-crm-production-78cc.up.railway.app/docs](https://support-crm-production-78cc.up.railway.app/docs)
 
@@ -29,14 +29,14 @@ A full-stack Customer Support CRM built for the **Datastraw Technologies** hirin
 │                         FRONTEND (Vercel)                       │
 │                                                                 │
 │   React 18 + Vite + Tailwind CSS                                │
-│   ┌──────────┐  ┌───────────────┐  ┌──────────────────┐        │
-│   │ HomePage │  │CreateTicketPg │  │ TicketDetailPage │        │
-│   │ (list,   │  │ (form +       │  │ (detail, status  │        │
-│   │  search, │  │  validation)  │  │  update, notes)  │        │
-│   │  filter) │  └───────────────┘  └──────────────────┘        │
+│   ┌──────────┐  ┌───────────────┐  ┌──────────────────┐         │
+│   │ HomePage │  │CreateTicketPg │  │ TicketDetailPage │         │
+│   │ (list,   │  │ (form +       │  │ (detail, status  │         │
+│   │  search, │  │  validation)  │  │  update, notes)  │         │
+│   │  filter) │  └───────────────┘  └──────────────────┘         │
 │   └──────────┘                                                  │
-│         │            api/client.js (fetch wrapper)               │
-│         │            VITE_API_URL env var                        │
+│         │            api/client.js (fetch wrapper)              │
+│         │            VITE_API_URL env var                       │
 └─────────┼───────────────────────────────────────────────────────┘
           │  HTTPS (CORS enabled)
           ▼
@@ -53,14 +53,14 @@ A full-stack Customer Support CRM built for the **Datastraw Technologies** hirin
 │   │  GET    /health               → health check     │          │
 │   └──────────────────────────────────────────────────┘          │
 │         │                                                       │
-│   ┌─────┴─────┐  ┌───────────┐  ┌────────────────┐             │
-│   │  crud.py  │  │ schemas.py│  │   utils.py     │             │
-│   │  (DB ops) │  │ (Pydantic)│  │ (ticket_id gen,│             │
-│   └─────┬─────┘  └───────────┘  │  categorizer)  │             │
-│         │                       └────────────────┘             │
+│   ┌─────┴─────┐  ┌───────────┐  ┌────────────────┐              │
+│   │  crud.py  │  │ schemas.py│  │   utils.py     │              │
+│   │  (DB ops) │  │ (Pydantic)│  │ (ticket_id gen,│              │
+│   └─────┬─────┘  └───────────┘  │  categorizer)  │              │
+│         │                       └────────────────┘              │
 │         ▼                                                       │
 │   ┌───────────────────────┐                                     │
-│   │  SQLite (crm.db)      │ ← Persistent Volume (/data)        │
+│   │  SQLite (crm.db)      │ ← Persistent Volume (/data)         │
 │   │  ┌────────┐ ┌───────┐ │                                     │
 │   │  │tickets │ │ notes │ │                                     │
 │   │  └────────┘ └───────┘ │                                     │
