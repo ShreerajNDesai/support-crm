@@ -10,7 +10,7 @@ import os
 sys.path.insert(0, os.path.dirname(__file__))
 
 from database import engine, Base
-from models import Ticket, Note  # noqa: F401 -- import triggers model registration
+import models  # import triggers model registration
 from sqlalchemy import inspect
 
 def verify():

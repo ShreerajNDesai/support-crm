@@ -10,9 +10,7 @@ Verifies:
 7. Add note to ticket (PUT /api/tickets/{id})
 """
 import os
-import sys
 import urllib.request
-import urllib.parse
 import json
 
 # Use PORT env var (Railway sets this dynamically) or fall back to 8000 for local dev

@@ -13,7 +13,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine, Base
-from models import Ticket, Note  # noqa: F401 — ensures models are registered before create_all
 from routers.tickets import router as tickets_router
 from schemas import HealthResponse
 
