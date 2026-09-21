@@ -21,7 +21,7 @@ export default function SearchBar({ onSearch, value = "" }) {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       onSearch(val);
-    }, 300);
+    }, 50);
   }
 
   return (
